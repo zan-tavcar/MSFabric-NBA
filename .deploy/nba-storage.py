@@ -12,9 +12,9 @@ branch = (
 
 
 # Sample values for FabricWorkspace parameters
-if branch == "ppe":
+if branch == "dev":
     workspace_id = "908e52e5-9352-482f-a11b-dcdde27a07bb"
-    environment = "PPE"
+    environment = "DEV"
 elif branch == "prod":
     workspace_id = "b85a9565-aec6-4e23-80e3-4f02ce50936f"
     environment = "PROD"
@@ -39,3 +39,4 @@ publish_all_items(target_workspace)
 # Unpublish all items defined in item_type_in_scope not found in repository
 
 unpublish_all_orphan_items(target_workspace)
+

@@ -1,0 +1,75 @@
+name: FabricCICD_Deployment
+
+on:
+  push:
+    branches: [ dev, prod ]
+    paths:
+      - 'workspace/**'
+  workflow_dispatch:
+
+# Mimic Azure Pipelines "batch: true" (one run per branch; cancel older ones)
+concurrency:
+  group: fabric-cicd-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-changed-workspaces:
+    # If you use a self-hosted runner, change this to: self-hosted
+    runs-on: ubuntu-latest
+
+    env:
+      # Map your Azure creds from GitHub Secrets (create these in repo → Settings → Secrets and variables)
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      # Azure DevOps System.AccessToken equivalent (if your scripts expect it)
+      SYSTEM_ACCESSTOKEN: ${{ github.token }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required for HEAD~1 diff
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Fabric-CICD
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade fabric-cicd
+
+      - name: Detect Changed Workspaces and Run Matching Scripts
+        shell: pwsh
+        run: |
+          git fetch origin
+          $targetBranch = "${{ github.ref_name }}"
+          Write-Host "##[section]Detected branch: $targetBranch"
+
+          $diffFiles = git diff --name-only HEAD~1 HEAD
+          Write-Host "##[section]🔍 Files changed in last commit:"
+          $diffFiles | ForEach-Object { Write-Host " - $_" }
+
+          $changedFolders = $diffFiles | Where-Object { $_ -like 'workspace/*' } | ForEach-Object {
+              ($_ -split '/')[1]
+          } | Sort-Object -Unique
+
+          Write-Host "##[section]📁 Changed workspace folders:"
+          $changedFolders | ForEach-Object { Write-Host " - $_" }
+
+          if (-not $changedFolders) {
+              Write-Host "##[section]No workspace changes detected. Skipping deployment."
+              exit 0
+          }
+
+          foreach ($folder in $changedFolders) {
+              $scriptPath = ".deploy/$folder.py"
+              if (Test-Path $scriptPath) {
+                  Write-Host "##[section]🔁 Deploying '$folder' with '$scriptPath'"
+                  python $scriptPath
+              } else {
+                  Write-Host "##[warning]⚠️ No script found for workspace '$folder'. Skipping."
+              }
+          }

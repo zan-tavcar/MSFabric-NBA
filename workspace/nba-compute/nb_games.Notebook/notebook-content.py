@@ -251,7 +251,7 @@ def generate_date_range(start_date, end_date):
     return date_list
 
 start_date = "2025-10-22"
-end_date = "2025-10-24"
+end_date = "2025-12-31"
 dates = generate_date_range(start_date, end_date)
 
 # Empty DataFrame to store results

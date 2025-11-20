@@ -73,8 +73,8 @@ from datetime import datetime, timedelta
 
 
 # Define date range
-start_date = datetime.strptime("2024-10-22", "%Y-%m-%d")
-end_date = datetime.strptime("2025-01-31", "%Y-%m-%d")
+start_date = datetime.strptime("2025-10-22", "%Y-%m-%d")
+end_date = datetime.strptime("2026-01-31", "%Y-%m-%d")
 days = (end_date - start_date).days + 1
 
 # Create list of dates

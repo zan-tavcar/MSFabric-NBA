@@ -39,11 +39,7 @@
 
 # CELL ********************
 
-ApiKey =  mssparkutils.credentials.getSecret(
-    'https://dataconsultingkeyvault.vault.azure.net/',      
-    'balldontlie'
-)
-
+%run nb_conn
 
 # METADATA ********************
 

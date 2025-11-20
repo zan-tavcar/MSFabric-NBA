@@ -8,8 +8,14 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse_name": "",
-# META       "default_lakehouse_workspace_id": ""
+# META       "default_lakehouse": "410d9a5e-6d93-4117-a75a-5395a55f8082",
+# META       "default_lakehouse_name": "NBA_Lakehouse",
+# META       "default_lakehouse_workspace_id": "edb11fd0-a25c-4817-8918-b9d74945988c",
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "410d9a5e-6d93-4117-a75a-5395a55f8082"
+# META         }
+# META       ]
 # META     }
 # META   }
 # META }

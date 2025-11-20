@@ -13,9 +13,9 @@
 
 config = {
     "dev": {
-        "workspace_id": "908e52e5-9352-482f-a11b-dcdde27a07bb",
-        "workspace_name": "nba3-storage-dev",
-        "lakehouse_name": "lh_NBA"
+        "workspace_id": "edb11fd0-a25c-4817-8918-b9d74945988c",
+        "workspace_name": "github-nba-storage-dev",
+        "lakehouse_name": "NBA_Lakehouse"
     },
     "prod": {
         "workspace_id": "dc1861de-0007-40e4-aaa9-7c1757a50069",

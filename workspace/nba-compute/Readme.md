@@ -1,1 +1,1 @@
-This is an auto-created file for workspace/nba-compute
+This is an auto-created file

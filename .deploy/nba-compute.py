@@ -6,8 +6,9 @@ client_id = os.environ["CLIENT_ID"]
 client_secret = os.environ["CLIENT_SECRET"]
 tenant_id = os.environ["TENANT_ID"]
 token_credential = ClientSecretCredential(client_id=client_id, client_secret=client_secret, tenant_id=tenant_id)
-branch = os.getenv("BUILD_SOURCEBRANCHNAME")
-
+branch = (
+    os.getenv("GITHUB_REF_NAME")
+).replace("refs/heads/", "").strip()
 
 # Sample values for FabricWorkspace parameters
 if branch == "dev":
@@ -37,3 +38,4 @@ publish_all_items(target_workspace)
 # Unpublish all items defined in item_type_in_scope not found in repository
 
 unpublish_all_orphan_items(target_workspace)
+

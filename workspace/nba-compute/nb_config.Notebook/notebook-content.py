@@ -9,6 +9,10 @@
 # META   "dependencies": {}
 # META }
 
+# MARKDOWN ********************
+
+# ## Lakehouse Endpoint
+
 # CELL ********************
 
 config = {
@@ -18,9 +22,9 @@ config = {
         "lakehouse_name": "NBA_Lakehouse"
     },
     "prod": {
-        "workspace_id": "dc1861de-0007-40e4-aaa9-7c1757a50069",
-        "workspace_name": "nba3-storage-prod",
-        "lakehouse_name": "lh_NBA"
+        "workspace_id": "b87c2c54-c90d-4f6d-8fe4-c3a87cc7eb8c",
+        "workspace_name": "github-nba-storage-prod",
+        "lakehouse_name": "NBA_Lakehouse"
     }
 }
 fabric_endpoint = "abfss://{}@onelake.dfs.fabric.microsoft.com/{}.Lakehouse/"
@@ -43,6 +47,37 @@ lakehouse_name = config[env]["lakehouse_name"]
 # Format the string with real values
 lakehouse_abfss = fabric_endpoint.format(workspace_name, lakehouse_name)
 print(lakehouse_abfss)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# ## SemanticModel Endpoint
+
+# CELL ********************
+
+config = {
+    "dev": {
+        "workspace_id": "73bcbe0e-d40c-4a29-8362-004feeae0b56",
+        "workspace_name": "github-nba-report-dev",
+        "semanticmodel_id": "9b8c3db5-fc10-4066-be00-ce8bd97e1923"
+    },
+    "prod": {
+        "workspace_id": "73bcbe0e-d40c-4a29-8362-004feeae0b56",
+        "workspace_name": "github-nba-report-prod",
+        "semanticmodel_id": "lh_NBA"
+    }
+}
+
+env = mssparkutils.env.getWorkspaceName()
+env = env.split("-")[-1]
+semanticmodel_ws = config[env]["workspace_id"]
+semanticmodel_id = config[env]["semanticmodel_id"]
 
 # METADATA ********************
 

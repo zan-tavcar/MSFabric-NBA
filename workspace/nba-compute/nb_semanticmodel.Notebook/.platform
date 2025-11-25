@@ -2,11 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "Notebook",
-    "displayName": "nb_calendar",
-    "description": "New notebook"
+    "displayName": "nb_semanticmodel"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "dba5d18e-26c0-86b2-4b01-bbd71bb3d33c"
+    "logicalId": "439c4ee3-9c02-8540-4568-223c95ad44cf"
   }
 }

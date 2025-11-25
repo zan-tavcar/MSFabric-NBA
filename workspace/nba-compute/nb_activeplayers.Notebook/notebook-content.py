@@ -137,6 +137,43 @@ while True:
 # META   "language_group": "synapse_pyspark"
 # META }
 
+# MARKDOWN ********************
+
+# ## Player Images
+
+# CELL ********************
+
+from pyspark.sql import functions as F
+
+relative_path = "Files/nba_players.csv"
+
+players_df = (
+    spark.read
+        .option("header", True)
+        .option("inferSchema", True)
+        .option("delimiter",";")
+        .csv(f"{lakehouse_abfss}{relative_path}")
+)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+display(players_df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 schema = "bronze"
@@ -156,6 +193,11 @@ from pyspark.sql.functions import concat, lit
 
 
 df = df.withColumn("full_name",concat(df["first_name"], lit(" "), df["last_name"]))
+df = df.alias("players").join(players_df.alias("image"), on = col("players.full_name") == col("image.Player"), how = "left").select(
+    col("players.*"),
+    col("image.PlayerUrl"),
+    col("image.ImageUrl")
+)
 df.distinct().write.format("delta").mode("overwrite").option("mergeSchema","true").save(path)
 
 # METADATA ********************

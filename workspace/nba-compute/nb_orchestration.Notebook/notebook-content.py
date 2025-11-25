@@ -51,8 +51,8 @@ DAG = {
             "dependencies":["nb_games"]
         },            
         {
-            "name": "nb_frontend",
-            "path": "nb_frontend",
+            "name": "nb_calendar",
+            "path": "nb_calendar",
             "timeoutPerCellInSeconds": 3600,
             "dependencies":["nb_games"]
         }
@@ -64,6 +64,17 @@ DAG = {
 # Execute the DAG
 notebookutils.notebook.runMultiple(DAG, {"dispayDAGViaGraphViz":True})
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+%run nb_semanticmodel
 
 # METADATA ********************
 

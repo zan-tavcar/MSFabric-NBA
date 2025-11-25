@@ -16,7 +16,7 @@ if branch == "dev":
     workspace_id = "edb11fd0-a25c-4817-8918-b9d74945988c"
     environment = "DEV"
 elif branch == "prod":
-    workspace_id = "b85a9565-aec6-4e23-80e3-4f02ce50936f"
+    workspace_id = "b87c2c54-c90d-4f6d-8fe4-c3a87cc7eb8c"
     environment = "PROD"
 else:
     raise ValueError("Invalid branch to deploy from")
@@ -39,5 +39,6 @@ publish_all_items(target_workspace)
 # Unpublish all items defined in item_type_in_scope not found in repository
 
 unpublish_all_orphan_items(target_workspace)
+
 
 

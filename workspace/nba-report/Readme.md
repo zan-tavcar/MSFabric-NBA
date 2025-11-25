@@ -1,1 +1,1 @@
-This is an auto-created file for workspace/nba-report
+This is an auto-created file

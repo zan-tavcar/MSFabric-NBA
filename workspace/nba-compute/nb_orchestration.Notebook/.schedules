@@ -29,6 +29,24 @@
           "Sunday"
         ]
       }
+    },
+    {
+      "enabled": true,
+      "jobType": "Execute",
+      "configuration": {
+        "type": "Monthly",
+        "startDateTime": "2025-11-30T00:00:00",
+        "endDateTime": "2026-11-30T23:59:00",
+        "localTimeZoneId": "Romance Standard Time",
+        "times": [
+          "12:00"
+        ],
+        "recurrence": 1,
+        "occurrence": {
+          "occurrenceType": "DayOfMonth",
+          "dayOfMonth": 1
+        }
+      }
     }
   ]
 }

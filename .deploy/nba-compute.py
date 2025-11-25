@@ -11,6 +11,20 @@ branch = (
     os.getenv("GITHUB_REF_NAME")
 ).replace("refs/heads/", "").strip()
 
+    
+# Sample values for FabricWorkspace parameters
+if branch == "dev":
+    workspace_id = "08c998b5-75a3-4c85-9665-4a5cd6add41d"
+    environment = "DEV"
+elif branch == "prod":
+    workspace_id = "2dedd6fb-8e30-4605-ae85-f2fc70c0c536"
+    environment = "PROD"
+else:
+    raise ValueError("Invalid branch to deploy from")
+
+repository = os.path.abspath("./workspace/nba-compute")
+item_type_in_scope = ["Notebook"]
+
 
 # -------------------------------------------------------
 # Helper: Fabric REST API call setup
@@ -58,18 +72,6 @@ if nb_orchestration_id:
 else:
     print("nb_orchestration not found in workspace — nothing to delete.")
     
-# Sample values for FabricWorkspace parameters
-if branch == "dev":
-    workspace_id = "08c998b5-75a3-4c85-9665-4a5cd6add41d"
-    environment = "DEV"
-elif branch == "prod":
-    workspace_id = "2dedd6fb-8e30-4605-ae85-f2fc70c0c536"
-    environment = "PROD"
-else:
-    raise ValueError("Invalid branch to deploy from")
-
-repository = os.path.abspath("./workspace/nba-compute")
-item_type_in_scope = ["Notebook"]
 
 # Initialize the FabricWorkspace object with the required parameters
 target_workspace = FabricWorkspace(
@@ -85,6 +87,7 @@ publish_all_items(target_workspace)
 # Unpublish all items defined in item_type_in_scope not found in repository
 
 unpublish_all_orphan_items(target_workspace)
+
 
 
 

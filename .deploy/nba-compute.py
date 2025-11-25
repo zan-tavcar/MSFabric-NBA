@@ -1,5 +1,6 @@
 from azure.identity import ClientSecretCredential
 import os
+import requests
 from fabric_cicd import FabricWorkspace, publish_all_items, unpublish_all_orphan_items
 
 client_id = os.environ["CLIENT_ID"]
@@ -10,6 +11,53 @@ branch = (
     os.getenv("GITHUB_REF_NAME")
 ).replace("refs/heads/", "").strip()
 
+
+# -------------------------------------------------------
+# Helper: Fabric REST API call setup
+# -------------------------------------------------------
+def get_fabric_headers():
+    # Scope for Fabric REST API
+    token = token_credential.get_token("https://api.fabric.microsoft.com/.default").token
+    return {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+
+# -------------------------------------------------------
+# STEP 1: Delete nb_orchestration via Fabric REST API
+# -------------------------------------------------------
+print("Looking for 'nb_orchestration' notebook to delete via Fabric REST API...")
+
+headers = get_fabric_headers()
+
+# List items in the workspace (optionally filter by itemType=notebook)
+list_url = f"https://api.fabric.microsoft.com/v1/workspaces/{workspace_id}/items?itemType=notebook"
+resp = requests.get(list_url, headers=headers)
+resp.raise_for_status()
+
+items = resp.json().get("value", [])
+
+nb_orchestration_id = None
+for item in items:
+    # displayName is the item name without the .Notebook suffix
+    if item.get("displayName") == "nb_orchestration":
+        nb_orchestration_id = item.get("id")
+        break
+
+if nb_orchestration_id:
+    delete_url = f"https://api.fabric.microsoft.com/v1/workspaces/{workspace_id}/items/{nb_orchestration_id}"
+    print(f"Deleting nb_orchestration (ID: {nb_orchestration_id})...")
+    del_resp = requests.delete(delete_url, headers=headers)
+    # 200 OK is success
+    if del_resp.status_code == 200:
+        print("nb_orchestration deleted successfully.")
+    elif del_resp.status_code == 404:
+        print("nb_orchestration not found at delete time (already removed?).")
+    else:
+        print(f"Failed to delete nb_orchestration, status {del_resp.status_code}, body: {del_resp.text}")
+else:
+    print("nb_orchestration not found in workspace — nothing to delete.")
+    
 # Sample values for FabricWorkspace parameters
 if branch == "dev":
     workspace_id = "08c998b5-75a3-4c85-9665-4a5cd6add41d"
@@ -31,28 +79,13 @@ target_workspace = FabricWorkspace(
     item_type_in_scope=item_type_in_scope,
     token_credential=token_credential
 )
-
-# Delete nb_orchestration first - there is bug in fabric-cicd (check #540 issue in their repo). This code below is temporary
-print("Looking for 'nb_orchestration' to delete...")
-
-items = target_workspace.fabric_api_client.get_items(workspace_id)
-
-for item in items:
-    # Item names do NOT include extension in API
-    if item.get("displayName") == "nb_orchestration":
-        item_id = item["id"]
-        print(f"Deleting nb_orchestration (ID: {item_id})...")
-        target_workspace.fabric_api_client.delete_item(workspace_id, item_id)
-        break
-else:
-    print("nb_orchestration not found — nothing to delete.")
-
 # Publish all items defined in item_type_in_scope
 publish_all_items(target_workspace)
 
 # Unpublish all items defined in item_type_in_scope not found in repository
 
 unpublish_all_orphan_items(target_workspace)
+
 
 
 

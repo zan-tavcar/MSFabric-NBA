@@ -13,6 +13,19 @@
           "08:00"
         ]
       }
+    },
+    {
+      "enabled": true,
+      "jobType": "Execute",
+      "configuration": {
+        "type": "Daily",
+        "startDateTime": "2025-12-01T00:00:00",
+        "endDateTime": "2025-12-13T23:59:00",
+        "localTimeZoneId": "Romance Standard Time",
+        "times": [
+          "08:00"
+        ]
+      }
     }
   ]
 }

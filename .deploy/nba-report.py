@@ -10,11 +10,11 @@ branch = os.getenv("BUILD_SOURCEBRANCHNAME")
 
 
 # Sample values for FabricWorkspace parameters
-if branch == "ppe":
-    workspace_id = "ae0c1dce-7565-4b75-9eaa-bbe49ad3a8be"
-    environment = "PPE"
+if branch == "dev":
+    workspace_id = "73bcbe0e-d40c-4a29-8362-004feeae0b56"
+    environment = "DEV"
 elif branch == "prod":
-    workspace_id = "87266e49-4f66-4c00-8fba-6583b92d4738"
+    workspace_id = "418466ca-14b2-4964-a18b-9c0828ea21fa"
     environment = "PROD"
 else:
     raise ValueError("Invalid branch to deploy from")
@@ -35,4 +35,5 @@ target_workspace = FabricWorkspace(
 publish_all_items(target_workspace)
 
 # Unpublish all items defined in item_type_in_scope not found in repository
+
 unpublish_all_orphan_items(target_workspace)

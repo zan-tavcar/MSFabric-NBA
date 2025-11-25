@@ -1,0 +1,9 @@
+role DAL
+	modelPermission: read
+
+	tablePermission games
+
+	tablePermission gamelines = [teamid] == 7
+
+	annotation PBI_Id = 9abb8a6bc5a24b38bc0fd637ce818e30
+

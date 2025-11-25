@@ -1,0 +1,575 @@
+table 'Calculation group'
+	lineageTag: e275935f-93cb-4c39-a69b-598864d7f9b5
+
+	calculationGroup
+
+		calculationItem Daily = SELECTEDMEASURE()
+
+		calculationItem Season = CALCULATE(SELECTEDMEASURE(), gamelines[min] <> "00", ALL(games))
+
+	measure AvgAssistsSeason = CALCULATE(AVERAGE(gamelines[ast]), games[status] = "Final", gamelines[min] <> "00", ALL(games[date]))
+		formatString: 0.0
+		lineageTag: ed2531e0-1693-4da7-b855-eca3f7eeeaa3
+
+	measure 'Conference Rank' =
+			
+			RANKX(
+			    FILTER(
+			        ALL('teams'),
+			        'teams'[conference] = MAX('teams'[conference])
+			    ),
+			    [Games Behind],
+			    ,
+			    ASC,
+			    Skip
+			)
+		lineageTag: 2a666ea7-ec24-4f21-93b6-65f066d16412
+
+	measure 'Games Behind' = ```
+			
+			VAR MaxWins = 
+			    MAXX(
+			        FILTER(
+			            ALL('teams'),
+			            'teams'[conference] = MAX('teams'[conference])
+			        ),
+			        [Games Won]
+			    )
+			VAR MinLosses = 
+			    MINX(
+			        FILTER(
+			            ALL('teams'),
+			            'teams'[conference] = MAX('teams'[conference])
+			        ),
+			        [Games Lost]
+			    )
+			VAR TeamWins = [Games Won]
+			VAR TeamLosses = [Games Lost]
+			RETURN
+			    DIVIDE(
+			        (MaxWins - TeamWins) + (TeamLosses - MinLosses),
+			        2
+			    )
+			```
+		formatString: 0.0
+		lineageTag: 89e56875-0762-43d9-b9ca-24c2c1724553
+
+	measure 'Games Lost' = ```
+			
+			CALCULATE(
+			    COUNT('games'[id]),
+			    'games'[status] = "Final",
+			    'games'[home_team_score] < 'games'[visitor_team_score],
+			    USERELATIONSHIP('teams'[id], 'games'[hometeam_id]), ALL(games)
+			)
+			+
+			CALCULATE(
+			    COUNT('games'[id]),
+			    'games'[status] = "Final",
+			    'games'[visitor_team_score] < 'games'[home_team_score],
+			    USERELATIONSHIP('teams'[id], 'games'[visitor_teamid]), ALL(games)
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 0d5d2095-6cc5-4d9c-9077-f52bbc049e7a
+
+	measure 'Games Played' = ```
+			
+			CALCULATE(
+			    COUNT('games'[id]),
+			    'games'[status] = "Final",
+			    USERELATIONSHIP('teams'[id],'games'[visitor_teamid]), ALL(games)
+			) + 
+			CALCULATE(
+			    COUNT('games'[id]),
+			    'games'[status] = "Final",
+			    USERELATIONSHIP('teams'[id],'games'[hometeam_id]), ALL(games)
+			)
+			```
+		formatString: 0
+		lineageTag: 3267c043-fdad-41bb-ac83-76eb8dbfaba7
+
+	measure Last5 = ```
+			
+			VAR HomeGames =
+			    TOPN(
+			        5,
+			        FILTER(
+			            ALL('games'),
+			            'games'[hometeam_id] = MAX('teams'[id]) &&
+			            'games'[status] = "Final"
+			        ),
+			        'games'[date], -- Sort by game date
+			        DESC
+			    )
+			VAR AwayGames =
+			    TOPN(
+			        5,
+			        FILTER(
+			            ALL('games'),
+			            'games'[awayteam_id] = MAX('teams'[id]) &&
+			            'games'[status] = "Final"
+			        ),
+			        'games'[date],
+			        DESC
+			    )
+			VAR CombinedGames =
+			    UNION(HomeGames, AwayGames)
+			VAR Last5Games =
+			    TOPN(
+			        5,
+			        CombinedGames,
+			        'games'[date],
+			        DESC
+			    )
+			VAR Results =
+			    ADDCOLUMNS(
+			        Last5Games,
+			        "Result",
+			        IF(
+			            'games'[hometeam_id] = MAX('teams'[id]),
+			            IF('games'[home_team_score] > 'games'[visitor_team_score], "W", "L"),
+			            IF('games'[visitor_team_score] > 'games'[home_team_score], "W", "L")
+			        )
+			    )
+			VAR FinalString =
+			    CONCATENATEX(
+			        Results,
+			        [Result],
+			        "",
+			        'games'[date], -- Sort by date
+			        DESC
+			    )
+			RETURN
+			    FinalString
+			
+			```
+		lineageTag: 2a6db761-c824-46df-b323-b029d8030e7f
+
+	measure AvgPointsSeason = CALCULATE(AVERAGE(gamelines[pts]), games[status] = "Final", gamelines[min] <> "00", ALL(games[date]))
+		formatString: 0.0
+		lineageTag: 61be0436-092f-4369-93d0-7aeeb67933c7
+
+	measure VisitorTeamWinner = ```
+			IF(SELECTEDVALUE(games[home_team_score]) < SELECTEDVALUE(games[visitor_team_score]), 1,0)
+			
+			```
+		formatString: 0
+		lineageTag: 9cdd1e71-e139-4a29-9bc9-138937381e14
+
+	measure SelectedTeam = CALCULATE(SELECTEDVALUE(teams[abbreviation]), USERELATIONSHIP(teams[id], players[team_id]))
+		lineageTag: c81fa907-93fb-4e70-8ea2-7fee7b616e91
+
+	measure RebountsRank = ```
+			SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players[full_name]), CALCULATE([Rebounds]),,DESC,Dense),
+			"Season", RANKX(ALL(players[full_name]), [AvgReboundsSeason],,DESC,Dense))
+			
+			```
+		lineageTag: b9b5f05d-9420-4b58-8e84-8e8858f3675a
+
+	measure Rebounds = AVERAGE(gamelines[reb])
+		formatString: 0
+		lineageTag: 2daa85c3-2e5e-45ad-9953-45a452abd7cb
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure PointsRank =
+			SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players[full_name]), CALCULATE([Points]),,DESC,Dense),
+			"Season", RANKX(ALL(players[full_name]), [AvgPointsSeason],,DESC,Dense))
+		lineageTag: 4516291d-47ca-4dd6-aff1-90ebd7096d5f
+
+	measure Points = AVERAGE(gamelines[pts])
+		formatString: 0
+		lineageTag: 6472192f-c6f1-4b2e-9d24-eb7c461cf043
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure PlayerName = SELECTEDVALUE(players[full_name])
+		lineageTag: 8851d521-febf-4caf-b6b4-ca4d31be47ba
+
+	measure HomeTeamWinner = ```
+			IF(SELECTEDVALUE(games[home_team_score]) > SELECTEDVALUE(games[visitor_team_score]), 1,0)
+			
+			```
+		formatString: 0
+		lineageTag: 9801d826-e73f-4fe8-833c-5a4db93f74cf
+
+	measure DummyMeasure = 0
+		formatString: 0
+		lineageTag: d285c612-74bb-4e8e-8009-c73900c1e3db
+
+	measure CountGames = CALCULATE(DISTINCTCOUNT(gamelines[gameid]), games[status] = "Final", gamelines[min] <> "00")
+		formatString: 0
+		lineageTag: 558709fd-f064-45bf-b039-f211ca1f1d01
+
+	measure AvgReboundsSeason = CALCULATE(AVERAGE(gamelines[reb]), games[status] = "Final", gamelines[min] <> "00", ALL(games[date]))
+		formatString: 0.0
+		lineageTag: 2d38b374-f905-40bf-afec-3ee6dc42c777
+
+	measure 'Games Won' =
+			
+			CALCULATE(
+			    COUNT('games'[id]),
+			    'games'[status] = "Final",
+			    'games'[home_team_score] > 'games'[visitor_team_score],
+			    USERELATIONSHIP('teams'[id], 'games'[hometeam_id]), ALL(games)
+			)
+			+
+			CALCULATE(
+			    COUNT('games'[id]),
+			    'games'[status] = "Final",
+			    'games'[visitor_team_score] > 'games'[home_team_score],
+			    USERELATIONSHIP('teams'[id], 'games'[visitor_teamid]), ALL(games)
+			)
+		formatString: 0
+		lineageTag: c442b180-0d47-4f27-9adf-1f10e0a6bf63
+
+	measure Last5SVG = ```
+			
+			VAR Last5 = [Last5] // Example sequence of wins (W) and losses (L)
+			VAR datauriPrefix = "data:image/svg+xml;utf8,"
+			VAR RectWidth = 100 // Increased width for better readability
+			VAR RectHeight = 100 // Increased height for better readability
+			VAR RectSpacing = 10
+			VAR StartX = 5
+			VAR SVGContent =
+			    "<svg xmlns='http://www.w3.org/2000/svg' width='" & 
+			    FORMAT((LEN(Last5) * (RectWidth + RectSpacing)) - RectSpacing + 2 * StartX, "0") & 
+			    "' height='300' viewBox='0 0 " & FORMAT((LEN(Last5) * (RectWidth + RectSpacing)) - RectSpacing + 2 * StartX, "0") & " 50'>"
+			    & CONCATENATEX(
+			        ADDCOLUMNS(
+			            GENERATESERIES(1, LEN(Last5)),
+			            "Result", MID(Last5, [Value], 1),
+			            "Color", IF(MID(Last5, [Value], 1) = "W", "#00C620", "#C51617"),
+			            "XPos", StartX + ([Value] - 1) * (RectWidth + RectSpacing)
+			        ),
+			        "<rect x='" & [XPos] & "' y='10' width='" & RectWidth & "' height='" & RectHeight & "' fill='" & [Color] & "' rx='4'/>"
+			        & "<text x='" & [XPos] + (RectWidth / 2) & "' y='28' text-anchor='middle' font-family='Segoe UI' font-size='16' fill='#B3B3B3'>" 
+			        & [Result] & "</text>"
+			    )
+			    & "</svg>"
+			RETURN
+			    datauriPrefix & SVGContent
+			
+			```
+		lineageTag: e1c0dcc9-514d-40fd-b2a1-7bd51c734686
+		dataCategory: ImageUrl
+
+	measure 'Conference Rank Label' =
+			
+			VAR Rank_ = [Conference Rank]
+			VAR RankText = FORMAT(Rank_, "0")
+			VAR LastDigit = RIGHT(RankText, 1)
+			VAR Suffix =
+			    SWITCH(
+			        TRUE(),
+			        Rank_ IN {11, 12, 13}, "th", -- special cases
+			        LastDigit = "1", "st",
+			        LastDigit = "2", "nd",
+			        LastDigit = "3", "rd",
+			        "th"
+			    )
+			RETURN
+			UNICHAR(8203) & UNICHAR(8203) & RankText & Suffix
+		lineageTag: 0b5877b1-6ae6-4a5d-9392-dbe27d27df6c
+
+	measure 'Games Won Label' = [Games Won] & " Won"
+		lineageTag: 9a26714c-6edf-46e1-bd33-5c4ed83edbd1
+
+	measure 'Games Lost Label' = [Games Lost] & " Lost"
+		lineageTag: 5c61d059-d969-4ca7-8729-5890a651fa7f
+
+	measure AveragePointsPerTeam = SUM(gamelines[pts]) / [Games Played]
+		formatString: 0.0
+		lineageTag: a2d4f33a-2ce1-455b-bb33-6507f2241a7b
+
+	measure 'Average Points Rank Label' = ```
+			
+			VAR Rank_ = 
+			    RANKX(
+			        ALL('teams'[name]),
+			        [AveragePointsPerTeam],
+			        ,
+			        DESC,
+			        DENSE
+			    )
+			VAR RankText = FORMAT(Rank_, "0")
+			VAR LastDigit = RIGHT(RankText, 1)
+			VAR Suffix =
+			    SWITCH(
+			        TRUE(),
+			        Rank_ IN {11, 12, 13}, "th",
+			        LastDigit = "1", "st",
+			        LastDigit = "2", "nd",
+			        LastDigit = "3", "rd",
+			        "th"
+			    )
+			RETURN
+			RankText & Suffix
+			```
+		lineageTag: 7085bb9a-1d9f-4c7f-9936-99235467ef09
+
+	measure StatsLabel = "Team Statistics"
+		lineageTag: d8cbc542-84ec-43fb-83a4-f1665d19e7e9
+
+	measure AverageReboundsPerTeam = SUM(gamelines[reb]) / [Games Played]
+		lineageTag: bfc442dc-a65a-4c24-bbf1-b4301b2bd598
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Rebounds Rank Label' = ```
+			
+			VAR Rank_ = 
+			    RANKX(
+			        ALL('teams'[name]),
+			        [AverageReboundsPerTeam],
+			        ,
+			        DESC,
+			        DENSE
+			    )
+			VAR RankText = FORMAT(Rank_, "0")
+			VAR LastDigit = RIGHT(RankText, 1)
+			VAR Suffix =
+			    SWITCH(
+			        TRUE(),
+			        Rank_ IN {11, 12, 13}, "th",
+			        LastDigit = "1", "st",
+			        LastDigit = "2", "nd",
+			        LastDigit = "3", "rd",
+			        "th"
+			    )
+			RETURN
+			RankText & Suffix
+			```
+		lineageTag: 028f0029-b5f4-426b-b548-e595376c9abe
+
+	measure AverageAssistsPerTeam = SUM(gamelines[ast]) / [Games Played]
+		lineageTag: 70de8ae2-74fa-4b64-8481-b2bdf2d820f4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Assists Rank Label' = ```
+			
+			VAR Rank_ = 
+			    RANKX(
+			        ALL('teams'[name]),
+			        [AverageAssistsPerTeam],
+			        ,
+			        DESC,
+			        DENSE
+			    )
+			VAR RankText = FORMAT(Rank_, "0")
+			VAR LastDigit = RIGHT(RankText, 1)
+			VAR Suffix =
+			    SWITCH(
+			        TRUE(),
+			        Rank_ IN {11, 12, 13}, "th",
+			        LastDigit = "1", "st",
+			        LastDigit = "2", "nd",
+			        LastDigit = "3", "rd",
+			        "th"
+			    )
+			RETURN
+			RankText & Suffix
+			```
+		lineageTag: ef393dde-2bc8-463c-baf7-a5cd73f0a084
+
+	measure 'Is Last 5 Games' =
+			
+			VAR SelectedTeam = SELECTEDVALUE(teams[id])
+			VAR AllGamesForTeam =
+			    FILTER (
+			        ALL (games),
+			        (games[hometeam_id] = SelectedTeam || games[awayteam_id] = SelectedTeam)
+			            && games[status] = "Final"
+			    )
+			VAR RankedGames =
+			    ADDCOLUMNS (
+			        AllGamesForTeam,
+			        "GameRank",
+			        RANKX (
+			            AllGamesForTeam,
+			            games[date],
+			            ,
+			            DESC
+			        )
+			    )
+			VAR Top5GameIds =
+			    SELECTCOLUMNS (
+			        FILTER (RankedGames, [GameRank] <= 5),
+			        "GameId", games[id]
+			    )
+			RETURN
+			IF( PATHCONTAINS ( SUBSTITUTE(CONCATENATEX(Top5GameIds, [GameId], ","), ",", "|"), SELECTEDVALUE(games[id] )), TRUE(), BLANK())
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bb45de61-eda6-498d-8f3d-cc1f3c9e5033
+
+	measure 'Is Next 5 Games' =
+			
+			VAR SelectedTeam = SELECTEDVALUE(teams[id])
+			VAR AllGamesForTeam =
+			    FILTER (
+			        ALL (games),
+			        (games[hometeam_id] = SelectedTeam || games[awayteam_id] = SelectedTeam)
+			            && games[status] <> "Final"
+			    )
+			VAR RankedGames =
+			    ADDCOLUMNS (
+			        AllGamesForTeam,
+			        "GameRank",
+			        RANKX (
+			            AllGamesForTeam,
+			            games[date],
+			            ,
+			            ASC
+			        )
+			    )
+			VAR Top5GameIds =
+			    SELECTCOLUMNS (
+			        FILTER (RankedGames, [GameRank] <= 5),
+			        "GameId", games[id]
+			    )
+			RETURN
+			IF( PATHCONTAINS ( SUBSTITUTE(CONCATENATEX(Top5GameIds, [GameId], ","), ",", "|"), CALCULATE(SELECTEDVALUE(games[id] ), CROSSFILTER(games[id],gamelines[gameid],None))), TRUE(), BLANK())
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 16e4b257-5166-4244-8314-dd86d8938b5d
+
+	measure PlayerPicture = SELECTEDVALUE(players[ImageUrl])
+		lineageTag: f7351728-2f92-4763-ad6c-890d2141d8c4
+		dataCategory: ImageUrl
+
+	measure PlayerTeam = SELECTEDVALUE(teams[full_name])
+		lineageTag: ff05810c-f720-45e0-92bb-061e01083dfa
+
+	measure Measure
+		lineageTag: 816fdafc-a6cf-4c37-b37f-bfd3310c94f1
+
+		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
+
+	measure PlayerPosition = SELECTEDVALUE(players[position])
+		lineageTag: 336ec724-03bd-43f5-a471-bc396416dcd4
+
+	measure PlayerCountry = SELECTEDVALUE(players[country])
+		lineageTag: f728c910-aea1-420b-b5a5-b7bc29fbc54e
+
+	measure PlayerHeight = SELECTEDVALUE(players[height])
+		lineageTag: 600a5558-e423-4750-b0a3-9c0a7363a8fe
+
+	measure PlayerWeight = SELECTEDVALUE(players[weight])
+		lineageTag: 44000372-7c81-454c-bda2-8617649c9930
+
+	measure FG% = DIVIDE(SUM(gamelines[fgm]), SUM(gamelines[fga]),0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: d210839f-22ff-4f69-91cd-de15b5c8fde0
+
+	measure 3P% = DIVIDE(SUM(gamelines[fg3m]), SUM(gamelines[fg3a]),0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 34ad456d-f7eb-4d6e-9895-c12b4217f7b7
+
+	measure FT% = DIVIDE(SUM(gamelines[ftm]), SUM(gamelines[fta]),0)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: 300a4abc-dc9b-482c-b6ab-1faf3b70baf5
+
+	measure 'Is Last 100 Games' =
+			
+			VAR SelectedTeam = SELECTEDVALUE(teams[id])
+			VAR AllGamesForTeam =
+			    FILTER (
+			        ALL (games),
+			        (games[hometeam_id] = SelectedTeam || games[awayteam_id] = SelectedTeam)
+			            && games[status] = "Final"
+			    )
+			VAR RankedGames =
+			    ADDCOLUMNS (
+			        AllGamesForTeam,
+			        "GameRank",
+			        RANKX (
+			            AllGamesForTeam,
+			            games[date],
+			            ,
+			            DESC
+			        )
+			    )
+			VAR Top5GameIds =
+			    SELECTCOLUMNS (
+			        FILTER (RankedGames, [GameRank] <= 100),
+			        "GameId", games[id]
+			    )
+			RETURN
+			IF( PATHCONTAINS ( SUBSTITUTE(CONCATENATEX(Top5GameIds, [GameId], ","), ",", "|"), SELECTEDVALUE(games[id] )), TRUE(), BLANK())
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: cb66a416-d4f5-4a17-9018-ca14ff83127d
+
+	measure Avg3PointSeason = CALCULATE(AVERAGE(gamelines[fg3m]), games[status] = "Final", gamelines[min] <> "00", ALL(games[date]))
+		formatString: 0.0
+		lineageTag: 2e13463c-e24d-4b41-a3da-2808786425e6
+
+	measure 3PointsRank =
+			SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players[full_name]), CALCULATE([Points]),,DESC,Dense),
+			"Season", RANKX(ALL(players[full_name]), [Avg3PointSeason],,DESC,Dense))
+		formatString: 0
+		lineageTag: a9291748-1c29-4fd3-a4e3-bc22a7ce3016
+
+	measure AvgBlocksSeason = CALCULATE(AVERAGE(gamelines[blk]), games[status] = "Final", gamelines[min] <> "00", ALL(games[date]))
+		formatString: 0.0
+		lineageTag: 3ac5f50f-4922-4a6e-a33b-b1172ae12545
+
+	measure AvgStealsSeason = CALCULATE(AVERAGE(gamelines[stl]), games[status] = "Final", gamelines[min] <> "00", ALL(games[date]))
+		formatString: 0.0
+		lineageTag: 2cf35ef8-9361-4948-ba74-514428ba195c
+
+	measure BlockRank =
+			SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players[full_name]), CALCULATE([Points]),,DESC,Dense),
+			"Season", RANKX(ALL(players[full_name]), [AvgBlocksSeason],,DESC,Dense))
+		formatString: 0
+		lineageTag: 055d2b0b-7dc7-4312-9ddf-47b4ad57fbaf
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure StealsRank =
+			SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players[full_name]), CALCULATE([Points]),,DESC,Dense),
+			"Season", RANKX(ALL(players[full_name]), [AvgStealsSeason],,DESC,Dense))
+		formatString: 0
+		lineageTag: 2a5f6fea-270f-4fba-b447-0b5e8c0c8219
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Measure 2'
+		lineageTag: 47c82714-fb7e-442d-a104-672003a0a812
+
+		annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":null}
+
+		annotation 277cc1b9-af89-4597-8e15-cacc25c0886b = To use special characters in a measure name, enclose the entire name in brackets ( [] ) and add a ] to any closing brackets in the name.
+
+	measure BlockRankRand =
+			(SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players[full_name]), CALCULATE([Points]),,DESC,Dense),
+			"Season", RANKX(ALL(players[full_name]), [AvgBlocksSeason],,DESC,Dense)) + RAND()) * (-1)
+		lineageTag: b7be5fd2-faad-4d77-a5d0-c5fdc9cde819
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Calculation group column'
+		dataType: string
+		lineageTag: ff725276-f375-46df-a5ee-3edc5049b9a2
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d7afb14-036c-46bf-b440-1bbea9302377
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

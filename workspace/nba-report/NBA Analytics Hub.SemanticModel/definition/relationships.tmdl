@@ -1,0 +1,33 @@
+relationship AutoDetected_da197947-09ff-4ae0-ba02-26f9f65a938e
+	fromColumn: games.date
+	toColumn: calendar.date
+
+relationship 7eb4c7ff-0f97-7e4c-0ebb-209a4a1234e8
+	crossFilteringBehavior: bothDirections
+	fromColumn: gamelines.gameid
+	toColumn: games.id
+
+relationship 3ff39382-14f7-7a6c-452a-2a4a2226ac4d
+	isActive: false
+	fromColumn: games.hometeam_id
+	toColumn: teams.id
+
+relationship a7335c2c-73ed-69c2-311b-9208027bf143
+	isActive: false
+	fromColumn: games.visitor_teamid
+	toColumn: teams.id
+
+relationship 8d24186a-42aa-b349-8713-25cd61feace6
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromColumn: players.team_id
+	toColumn: teams.id
+
+relationship 7bd85839-4676-9631-7db6-731345402efa
+	fromColumn: gamelines.teamid
+	toColumn: teams.id
+
+relationship 27411988-294a-d974-5cfc-06c69c807d20
+	fromColumn: gamelines.playerid
+	toColumn: players.id
+

@@ -1,0 +1,151 @@
+table players
+	lineageTag: 7b67c490-2b2d-49d6-bad9-ab21b203021f
+
+	measure ImageUrlMeasure = SELECTEDVALUE(players[ImageUrl])
+		lineageTag: a709a63d-d00d-41cb-8989-3eb306246681
+		dataCategory: ImageUrl
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: c7767229-65f0-459e-8454-3c1e676c07e3
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_name
+		dataType: string
+		lineageTag: 2401bf4f-b7e5-4e5c-9342-c8554def0de5
+		summarizeBy: none
+		sourceColumn: first_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_name
+		dataType: string
+		lineageTag: 5193b858-d2a0-4783-a710-b2f9d318b173
+		summarizeBy: none
+		sourceColumn: last_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column position
+		dataType: string
+		lineageTag: d570b258-268c-4f53-b2ab-35db8b80357f
+		summarizeBy: none
+		sourceColumn: position
+
+		annotation SummarizationSetBy = Automatic
+
+	column height
+		dataType: string
+		lineageTag: 2453f876-2a3e-40c9-a10c-de08c97c0df8
+		summarizeBy: none
+		sourceColumn: height
+
+		annotation SummarizationSetBy = Automatic
+
+	column weight
+		dataType: string
+		lineageTag: 6ce17807-cd5c-4e45-ac39-e7644632051e
+		summarizeBy: none
+		sourceColumn: weight
+
+		annotation SummarizationSetBy = Automatic
+
+	column jersey_number
+		dataType: string
+		lineageTag: 96c288a6-5366-464b-87d5-4ac361229048
+		summarizeBy: none
+		sourceColumn: jersey_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column college
+		dataType: string
+		lineageTag: 4fcc8a43-9613-4695-ba4e-c606cca4b20a
+		summarizeBy: none
+		sourceColumn: college
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: 34fe07c5-ceef-4d3b-8a57-d3c79cdc35ee
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column draft_year
+		dataType: string
+		lineageTag: 56d561dc-6f5a-42a8-aa8f-13a48d56f78a
+		summarizeBy: none
+		sourceColumn: draft_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column draft_round
+		dataType: string
+		lineageTag: c82c5787-9311-49dd-a2bf-0f97e1d88ec2
+		summarizeBy: none
+		sourceColumn: draft_round
+
+		annotation SummarizationSetBy = Automatic
+
+	column draft_number
+		dataType: string
+		lineageTag: 5d175c80-8334-4b3c-a671-904e48e03a1c
+		summarizeBy: none
+		sourceColumn: draft_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column team_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 60203f2c-0057-4eab-bfa9-1936475f441c
+		summarizeBy: none
+		sourceColumn: team_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_name
+		dataType: string
+		lineageTag: 5414c9db-2905-4d09-822f-83c6470cf5e0
+		summarizeBy: none
+		sourceColumn: full_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlayerUrl
+		dataType: string
+		lineageTag: 6c1fb9d6-bb00-417d-af23-e6ee4ffe7491
+		summarizeBy: none
+		sourceColumn: PlayerUrl
+
+		annotation SummarizationSetBy = Automatic
+
+	column ImageUrl
+		dataType: string
+		lineageTag: c6a355a0-0711-4b5f-aeeb-f7d6e99d48c9
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: ImageUrl
+
+		annotation SummarizationSetBy = Automatic
+
+	partition players = m
+		mode: import
+		source =
+				let
+					Source = DatabaseQuery,
+					Data = Source{[Schema="bronze",Item="players"]}[Data]
+				in
+					Data
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

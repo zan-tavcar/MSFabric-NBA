@@ -1,0 +1,54 @@
+table 'Meta Data'
+	lineageTag: ab710528-9584-4518-ad64-d0a543abe29a
+
+	measure 'Meta Data Display' = ```
+			
+			SWITCH(
+			    TRUE(),
+			    SELECTEDVALUE('Meta Data'[Type]) = "Last Refresh", 
+			        "Last Refreshed: " & FORMAT(
+			            DATEVALUE(MAX(games[date])),
+			            "mmm dd, yyyy"
+			        ),
+			    SELECTEDVALUE('Meta Data'[Type]) = "Developer", 
+			        "Developer: Žan Tavčar",
+			    SELECTEDVALUE('Meta Data'[Type]) = "Team", 
+			        "Team: " & MAX('Meta Data'[Value]),
+			    SELECTEDVALUE('Meta Data'[Type]) = "Version", 
+			        "Version: 1.0",
+			    BLANK()
+			)
+			```
+		lineageTag: 1ec25e1a-f0c9-4785-a566-84aa63896696
+
+		changedProperty = Name
+
+	column Type
+		dataType: string
+		lineageTag: c80b7980-6caf-4242-b512-64836a8b0f07
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: string
+		lineageTag: 0abb5189-9b9c-4f42-88ad-3ebf058f5ab7
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Meta Data' = m
+		mode: import
+		source =
+				let
+					Source = DatabaseQuery,
+					Data = Source{[Schema="dbo",Item="metadata"]}[Data]
+				in
+					Data
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

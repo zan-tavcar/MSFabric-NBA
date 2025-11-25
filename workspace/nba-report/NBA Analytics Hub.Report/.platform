@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "NBA Analytics Hub"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9a93b2b9-1532-8b00-4e98-e7b1d9d4456c"
+  }
+}

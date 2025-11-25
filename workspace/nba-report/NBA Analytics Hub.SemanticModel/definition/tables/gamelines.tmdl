@@ -1,0 +1,256 @@
+table gamelines
+	lineageTag: 53c9057f-83b0-4e04-8510-fa62b268359a
+
+	measure Assists = AVERAGE(gamelines[ast])
+		formatString: 0
+		lineageTag: 06a7c7fc-fa20-4a02-9747-73904aa71edb
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure AssistsRank = ```
+			SWITCH(SELECTEDVALUE('Calculation group'[Calculation group column]),
+			"Daily", RANKX(ALL(players), CALCULATE([Assists]),,DESC,Dense),
+			"Season", RANKX(ALL(players), [AvgAssistsSeason],,DESC,Dense))
+			
+			
+			```
+		lineageTag: f7cb3ba6-7623-452b-943e-0819c306a63e
+
+		changedProperty = Name
+
+	measure FGM_ = SUM(gamelines[fgm])
+		formatString: 0
+		lineageTag: d490307e-023b-4266-adc7-14ad23944eca
+
+	measure FGA_ = SUM(gamelines[fga])
+		formatString: 0
+		lineageTag: a22ef3c9-e3d3-40ea-b94f-0d11e05b1b3c
+
+	measure Minutes = SUMX ( gamelines, VALUE ( gamelines[min] ) )
+		formatString: 0
+		lineageTag: cb5fc791-2b46-4ee5-8862-9acfc29d30a1
+
+	measure Steals = SUM(gamelines[stl])
+		formatString: 0
+		lineageTag: 386184f2-fd2a-4941-ab91-89339fd653bc
+
+	measure Turnovers = SUM(gamelines[turnover])
+		formatString: 0
+		lineageTag: 06c90af5-dde7-4d44-b47a-2ae775972daf
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: 33054115-6670-44d5-b59f-7b3a819bad9a
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column min
+		dataType: string
+		lineageTag: 1844f394-5f42-4371-be0b-b5a1f2256aca
+		summarizeBy: none
+		sourceColumn: min
+
+		annotation SummarizationSetBy = Automatic
+
+	column fgm
+		dataType: int64
+		formatString: 0
+		lineageTag: 23299dd6-d4e3-4187-87dd-f24635269c3b
+		summarizeBy: sum
+		sourceColumn: fgm
+
+		annotation SummarizationSetBy = Automatic
+
+	column fga
+		dataType: int64
+		formatString: 0
+		lineageTag: d16409ae-f7bd-4d5a-b5ef-244e374a12be
+		summarizeBy: sum
+		sourceColumn: fga
+
+		annotation SummarizationSetBy = Automatic
+
+	column fg_pct
+		dataType: string
+		lineageTag: f5a51d41-0c87-4db4-b50e-ac77a3d6f881
+		summarizeBy: none
+		sourceColumn: fg_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column fg3m
+		dataType: int64
+		formatString: 0
+		lineageTag: 2178c869-c639-4666-b931-161b30489475
+		summarizeBy: sum
+		sourceColumn: fg3m
+
+		annotation SummarizationSetBy = Automatic
+
+	column fg3a
+		dataType: int64
+		formatString: 0
+		lineageTag: 59d6acd5-9e31-4b0c-b4eb-72462353fa57
+		summarizeBy: sum
+		sourceColumn: fg3a
+
+		annotation SummarizationSetBy = Automatic
+
+	column fg3_pct
+		dataType: string
+		lineageTag: 0e987b2f-bf49-4de3-9448-c8ac75aa1d8b
+		summarizeBy: none
+		sourceColumn: fg3_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column ftm
+		dataType: int64
+		formatString: 0
+		lineageTag: e6d3243e-dc66-485e-b3af-9e8c6f05685a
+		summarizeBy: sum
+		sourceColumn: ftm
+
+		annotation SummarizationSetBy = Automatic
+
+	column fta
+		dataType: int64
+		formatString: 0
+		lineageTag: ee947b32-d7c1-4931-8c88-970f8df9c35f
+		summarizeBy: sum
+		sourceColumn: fta
+
+		annotation SummarizationSetBy = Automatic
+
+	column ft_pct
+		dataType: string
+		lineageTag: eeb52504-4f4c-4613-91e8-41d5354fff30
+		summarizeBy: none
+		sourceColumn: ft_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column oreb
+		dataType: int64
+		formatString: 0
+		lineageTag: bea321e7-1cb0-4563-9f06-f5247e174e4c
+		summarizeBy: sum
+		sourceColumn: oreb
+
+		annotation SummarizationSetBy = Automatic
+
+	column dreb
+		dataType: int64
+		formatString: 0
+		lineageTag: 69d34660-6832-4689-a579-4527780a4734
+		summarizeBy: sum
+		sourceColumn: dreb
+
+		annotation SummarizationSetBy = Automatic
+
+	column reb
+		dataType: int64
+		formatString: 0
+		lineageTag: 43d86807-f640-47d0-9f8d-c04ee1b705f0
+		summarizeBy: sum
+		sourceColumn: reb
+
+		annotation SummarizationSetBy = Automatic
+
+	column ast
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b35f65b-5fa4-46ef-95e0-005518023c37
+		summarizeBy: sum
+		sourceColumn: ast
+
+		annotation SummarizationSetBy = Automatic
+
+	column stl
+		dataType: int64
+		formatString: 0
+		lineageTag: e5d2ccdf-2a03-482f-bcb0-46518f512cc8
+		summarizeBy: sum
+		sourceColumn: stl
+
+		annotation SummarizationSetBy = Automatic
+
+	column blk
+		dataType: int64
+		formatString: 0
+		lineageTag: cbf85b62-10e8-4b1b-a3c5-4a28ab1fa540
+		summarizeBy: sum
+		sourceColumn: blk
+
+		annotation SummarizationSetBy = Automatic
+
+	column turnover
+		dataType: int64
+		formatString: 0
+		lineageTag: 6596a169-0e62-4f40-a696-2cb1bf522ba6
+		summarizeBy: sum
+		sourceColumn: turnover
+
+		annotation SummarizationSetBy = Automatic
+
+	column pf
+		dataType: int64
+		formatString: 0
+		lineageTag: 5fce0a87-998d-4564-8dcb-0de73c1d8e5e
+		summarizeBy: sum
+		sourceColumn: pf
+
+		annotation SummarizationSetBy = Automatic
+
+	column pts
+		dataType: int64
+		formatString: 0
+		lineageTag: 0320bf4b-a24b-4578-8a71-bbb3d3254c0b
+		summarizeBy: sum
+		sourceColumn: pts
+
+		annotation SummarizationSetBy = Automatic
+
+	column playerid
+		dataType: int64
+		formatString: 0
+		lineageTag: 42d4006b-f7cd-4ce6-891e-32ef1b97e64d
+		summarizeBy: none
+		sourceColumn: playerid
+
+		annotation SummarizationSetBy = Automatic
+
+	column teamid
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e4576c6-208c-43b1-b05c-b4546bf428b0
+		summarizeBy: none
+		sourceColumn: teamid
+
+		annotation SummarizationSetBy = Automatic
+
+	column gameid
+		dataType: int64
+		formatString: 0
+		lineageTag: 91022aba-811d-449e-9e1d-b3ac21abb306
+		summarizeBy: none
+		sourceColumn: gameid
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gamelines = m
+		mode: import
+		source =
+				let
+					Source = DatabaseQuery,
+					Data = Source{[Schema="bronze",Item="gamelines"]}[Data]
+				in
+					Data
+
+	annotation PBI_ResultType = Table
+

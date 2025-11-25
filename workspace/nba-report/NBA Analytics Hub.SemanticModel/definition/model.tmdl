@@ -1,0 +1,33 @@
+model Model
+	culture: en-US
+	collation: Latin1_General_100_BIN2_UTF8
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["DatabaseQuery","games","teams","players","gamelines","Meta Data","calendar"]
+
+annotation __PBIService_Versioning_SaveVersion = cb827e3a-011a-4f08-942f-ebac7eef3ac3
+
+annotation PBI_ProTooling = ["SLL", "WebModelingEdit", "CalcGroup"]
+
+annotation __TEdtr = 1
+
+ref table games
+ref table teams
+ref table players
+ref table gamelines
+ref table 'Calculation group'
+ref table 'Meta Data'
+ref table calendar
+
+ref role DAL
+ref role LAL
+
+ref cultureInfo en-US
+

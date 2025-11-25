@@ -1,0 +1,84 @@
+table calendar
+	lineageTag: ccf8ea78-ae7a-4a5d-b3b6-36682113cccd
+
+	measure DateSelectedValue = SELECTEDVALUE('calendar'[date_label])
+		lineageTag: 20394e4d-8844-4711-afc0-d9b86d89d648
+
+		changedProperty = Name
+
+	column date
+		dataType: string
+		lineageTag: 3704d323-bde0-4374-bf21-6452022a6d5f
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month
+		dataType: string
+		lineageTag: c82441b8-6a13-413f-8e23-9ff39a277482
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month_sort
+		dataType: string
+		lineageTag: 4eb9cdea-1546-4208-bd9e-1de348b69bec
+		summarizeBy: none
+		sourceColumn: year_month_sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_label
+		dataType: string
+		lineageTag: 92f94b3b-28b5-46c6-ba4f-fbcfe25f0172
+		summarizeBy: none
+		sourceColumn: date_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column dateformat
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 96678173-ff18-44c1-8ef9-70b49ecdc82c
+		summarizeBy: none
+		sourceColumn: dateformat
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column MaxDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0574f6cd-4aad-445d-96d8-3977be2c7af6
+		summarizeBy: none
+		sourceColumn: MaxDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column IsLastDay
+		dataType: int64
+		formatString: 0
+		lineageTag: 7214327e-4cf6-4eb7-a0fb-a8d5df7d6cbd
+		summarizeBy: none
+		sourceColumn: IsLastDay
+
+		annotation SummarizationSetBy = Automatic
+
+	partition calendar = m
+		mode: import
+		source =
+				let
+					Source = DatabaseQuery,
+				    dbo_calendar = Source{[Schema="dbo",Item="calendar"]}[Data]
+				in
+				    dbo_calendar
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

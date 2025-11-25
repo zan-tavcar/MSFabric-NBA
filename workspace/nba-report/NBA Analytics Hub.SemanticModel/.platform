@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "NBA Analytics Hub"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d97e1923-ce8b-be00-4066-fc109b8c3db5"
+  }
+}

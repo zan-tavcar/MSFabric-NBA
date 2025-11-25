@@ -1,0 +1,100 @@
+table teams
+	lineageTag: 2b5ab7c9-d3cc-4096-b4e1-1b0e2671d69a
+
+	measure TeamName = SELECTEDVALUE(teams[full_name])
+		lineageTag: ece5f189-8475-4685-aa95-6e45fabc3c6f
+
+		changedProperty = Name
+
+	measure TeamLogo = SELECTEDVALUE(teams[logo])
+		lineageTag: 90c4498a-2144-4dfb-af22-a8678d457745
+		dataCategory: ImageUrl
+
+		changedProperty = Name
+
+		changedProperty = DataCategory
+
+	measure TeamConference = SELECTEDVALUE(teams[conference])
+		lineageTag: 33df91d9-fa3c-4d3c-b4da-38202464e33e
+
+		changedProperty = Name
+
+	column id
+		dataType: int64
+		formatString: 0
+		lineageTag: e4d4f41b-da60-4ffc-a75f-148d3d4617cb
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+	column conference
+		dataType: string
+		lineageTag: 76aa59b4-7057-42f1-b775-50c85d9b2aad
+		summarizeBy: none
+		sourceColumn: conference
+
+		annotation SummarizationSetBy = Automatic
+
+	column division
+		dataType: string
+		lineageTag: 0d031cfc-71e2-4cf5-9d4f-f296aad046ca
+		summarizeBy: none
+		sourceColumn: division
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 7ead7b21-7ca2-42b3-9a0f-197f55ea0a07
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column name
+		dataType: string
+		lineageTag: b88bdb2a-bc7f-474f-8a82-2cb392abc34e
+		summarizeBy: none
+		sourceColumn: name
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_name
+		dataType: string
+		lineageTag: 5c1f762a-1603-48ca-8471-9357478eb271
+		summarizeBy: none
+		sourceColumn: full_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column abbreviation
+		dataType: string
+		lineageTag: 1fbda7fb-ca57-46f3-a3f7-91ad4cf3e279
+		summarizeBy: none
+		sourceColumn: abbreviation
+
+		annotation SummarizationSetBy = Automatic
+
+	column logo
+		dataType: string
+		lineageTag: c1a0d9a5-d060-4c9d-af4d-bd22107fd40b
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: logo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition teams = m
+		mode: import
+		source =
+				let
+					Source = DatabaseQuery,
+					Data = Source{[Schema="bronze",Item="teams"]}[Data]
+				in
+					Data
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

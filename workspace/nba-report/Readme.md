@@ -1,1 +1,1 @@
-This is an auto-created file test
+This is an auto-created file

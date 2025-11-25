@@ -1,0 +1,9 @@
+find_replace:
+    - find_value: "px26hph3zcbevcpg3qwksowtoe-2ap3d3k4uilurciyxhlusrmyrq.datawarehouse.fabric.microsoft.com"
+      replace_value:
+          DEV: "px26hph3zcbevcpg3qwksowtoe-2ap3d3k4uilurciyxhlusrmyrq.datawarehouse.fabric.microsoft.com" 
+          PROD: "px26hph3zcbevcpg3qwksowtoe-kqwhzoanzfwu7d7eyouhzr7lrq.datawarehouse.fabric.microsoft.com"
+    - find_value: "f999938f-77af-4ca0-8867-88e5ae77660d"
+      replace_value:
+          DEV: "f999938f-77af-4ca0-8867-88e5ae77660d" 
+          PROD: "306fbdef-55c3-4f68-a1d9-8ee420a58486" 

@@ -1,0 +1,14 @@
+key_value_replace:
+  # Daily trigger: OFF in DEV, ON in PROD
+  - find_key: '$.schedules[?(@.configuration.type=="Daily")].enabled'
+    replace_value:
+      DEV: false
+      PROD: true
+    item_name: ["nb_orchestration"]
+
+  # Weekly trigger: ON in DEV, OFF in PROD
+  - find_key: '$.schedules[?(@.configuration.type=="Weekly")].enabled'
+    replace_value:
+      DEV: true
+      PROD: false
+    item_name: ["nb_orchestration"]

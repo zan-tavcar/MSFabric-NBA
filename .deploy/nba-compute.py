@@ -22,7 +22,20 @@ else:
 
 repository = os.path.abspath("./workspace/nba-compute")
 item_type_in_scope = ["Notebook"]
+# Delete nb_orchestration first - there is bug in fabric-cicd (check #540 issue in their repo). This code below is temporary
+print("Looking for 'nb_orchestration' to delete...")
 
+items = target_workspace.fabric_api_client.get_items(workspace_id)
+
+for item in items:
+    # Item names do NOT include extension in API
+    if item.get("displayName") == "nb_orchestration":
+        item_id = item["id"]
+        print(f"Deleting nb_orchestration (ID: {item_id})...")
+        target_workspace.fabric_api_client.delete_item(workspace_id, item_id)
+        break
+else:
+    print("nb_orchestration not found — nothing to delete.")
 # Initialize the FabricWorkspace object with the required parameters
 target_workspace = FabricWorkspace(
     workspace_id=workspace_id,
@@ -38,4 +51,5 @@ publish_all_items(target_workspace)
 # Unpublish all items defined in item_type_in_scope not found in repository
 
 unpublish_all_orphan_items(target_workspace)
+
 

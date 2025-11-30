@@ -70,7 +70,7 @@ config = {
     "prod": {
         "workspace_id": "418466ca-14b2-4964-a18b-9c0828ea21fa",
         "workspace_name": "github-nba-report-prod",
-        "semanticmodel_id": "f66bb606-1ce0-4e63-8f6f-d5d7e7a94ac33"
+        "semanticmodel_id": "f66bb606-1ce0-4e63-8f6f-d5d7e7a94ac3"
     }
 }
 

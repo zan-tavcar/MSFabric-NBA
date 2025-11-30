@@ -68,9 +68,9 @@ config = {
         "semanticmodel_id": "9b8c3db5-fc10-4066-be00-ce8bd97e1923"
     },
     "prod": {
-        "workspace_id": "73bcbe0e-d40c-4a29-8362-004feeae0b56",
+        "workspace_id": "/418466ca-14b2-4964-a18b-9c0828ea21fa",
         "workspace_name": "github-nba-report-prod",
-        "semanticmodel_id": "f66bb606-1ce0-4e63-8f6f-d5d7e7a94ac3"
+        "semanticmodel_id": "f66bb606-1ce0-4e63-8f6f-d5d7e7a94ac33"
     }
 }
 

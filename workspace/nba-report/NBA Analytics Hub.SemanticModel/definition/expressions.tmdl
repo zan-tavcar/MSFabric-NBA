@@ -7,3 +7,7 @@ expression DatabaseQuery =
 
 	annotation PBI_IncludeFutureArtifacts = False
 
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

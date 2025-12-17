@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/graphqlApi/definition/1.0.0/schema.json",
+  "datasources": [
+    {
+      "objects": [
+        {
+          "actions": {
+            "Query": "Enabled",
+            "Query_by_pk": "Enabled",
+            "Create": "Enabled",
+            "Update": "Enabled",
+            "Delete": "Enabled"
+          },
+          "fieldMappings": {
+            "Country": "Country",
+            "Height": "Height",
+            "ImageUrl": "ImageUrl",
+            "LastAttended": "LastAttended",
+            "Number": "Number",
+            "Player": "Player",
+            "PlayerId": "PlayerId",
+            "PlayerRaw": "PlayerRaw",
+            "PlayerUrl": "PlayerUrl",
+            "Position": "Position",
+            "Team": "Team",
+            "Weight": "Weight"
+          },
+          "graphqlType": "Player1",
+          "relationships": [],
+          "sourceObject": "dbo.Player1",
+          "sourceObjectType": "Table"
+        },
+        {
+          "actions": {
+            "Query": "Enabled",
+            "Query_by_pk": "Enabled",
+            "Create": "Enabled",
+            "Update": "Enabled",
+            "Delete": "Enabled"
+          },
+          "fieldMappings": {
+            "Country": "Country",
+            "Height": "Height",
+            "ImageUrl": "ImageUrl",
+            "LastAttended": "LastAttended",
+            "Number": "Number",
+            "Player": "Player",
+            "PlayerId": "PlayerId",
+            "PlayerRaw": "PlayerRaw",
+            "PlayerUrl": "PlayerUrl",
+            "Position": "Position",
+            "Team": "Team",
+            "Weight": "Weight"
+          },
+          "graphqlType": "Player2",
+          "relationships": [],
+          "sourceObject": "dbo.Player2",
+          "sourceObjectType": "Table"
+        },
+        {
+          "actions": {
+            "Query": "Enabled"
+          },
+          "fieldMappings": {
+            "Id": "Id"
+          },
+          "graphqlType": "TestView",
+          "relationships": [],
+          "sourceObject": "dbo.TestView",
+          "sourceObjectType": "View"
+        }
+      ],
+      "sourceItemId": "73315750-d63a-a4e1-465c-5f80e90e68f2",
+      "sourceType": "Warehouse",
+      "sourceWorkspaceId": "00000000-0000-0000-0000-000000000000"
+    }
+  ]
+}

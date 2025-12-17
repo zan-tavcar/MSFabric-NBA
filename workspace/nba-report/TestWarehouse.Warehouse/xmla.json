@@ -401,6 +401,200 @@
         ]
       },
       {
+        "name": "PlayerView",
+        "sourceLineageTag": "[dbo].[PlayerView]",
+        "columns": [
+          {
+            "name": "Player",
+            "dataType": "string",
+            "sourceColumn": "Player",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Player",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PlayerRaw",
+            "dataType": "string",
+            "sourceColumn": "PlayerRaw",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PlayerRaw",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Team",
+            "dataType": "string",
+            "sourceColumn": "Team",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Team",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Number",
+            "dataType": "int64",
+            "sourceColumn": "Number",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "Number",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Position",
+            "dataType": "string",
+            "sourceColumn": "Position",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Position",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Height",
+            "dataType": "string",
+            "sourceColumn": "Height",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Height",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Weight",
+            "dataType": "string",
+            "sourceColumn": "Weight",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Weight",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "LastAttended",
+            "dataType": "string",
+            "sourceColumn": "LastAttended",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "LastAttended",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "Country",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PlayerId",
+            "dataType": "int64",
+            "sourceColumn": "PlayerId",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "PlayerId",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "PlayerUrl",
+            "dataType": "string",
+            "sourceColumn": "PlayerUrl",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "PlayerUrl",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "ImageUrl",
+            "dataType": "string",
+            "sourceColumn": "ImageUrl",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "ImageUrl",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "PlayerView",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "dbo"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
         "name": "TestView",
         "sourceLineageTag": "[dbo].[TestView]",
         "columns": [

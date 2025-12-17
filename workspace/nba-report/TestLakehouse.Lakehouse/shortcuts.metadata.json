@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "name": "Player2",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/Player2",
+        "itemId": "73315750-d63a-a4e1-465c-5f80e90e68f2",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Warehouse"
+      }
+    }
+  },
+  {
+    "name": "Player1",
+    "path": "/Tables/dbo",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/Player1",
+        "itemId": "73315750-d63a-a4e1-465c-5f80e90e68f2",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Warehouse"
+      }
+    }
+  }
+]

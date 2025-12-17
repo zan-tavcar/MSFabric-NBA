@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "GraphQLApi",
+    "displayName": "GraphQL_Lakehouse"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ffb7836c-5a6d-8279-487f-556045e46b83"
+  }
+}

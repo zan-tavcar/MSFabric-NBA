@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/graphqlApi/definition/1.0.0/schema.json",
+  "datasources": [
+    {
+      "objects": [
+        {
+          "actions": {
+            "Query": "Enabled",
+            "Query_by_pk": "Enabled",
+            "Create": "Enabled",
+            "Update": "Enabled",
+            "Delete": "Enabled"
+          },
+          "fieldMappings": {
+            "Country": "Country",
+            "Height": "Height",
+            "ImageUrl": "ImageUrl",
+            "LastAttended": "LastAttended",
+            "Number": "Number",
+            "Player": "Player",
+            "PlayerId": "PlayerId",
+            "PlayerRaw": "PlayerRaw",
+            "PlayerUrl": "PlayerUrl",
+            "Position": "Position",
+            "Team": "Team",
+            "Weight": "Weight"
+          },
+          "graphqlType": "nba_players",
+          "relationships": [],
+          "sourceObject": "dbo.nba_players",
+          "sourceObjectType": "Table"
+        }
+      ],
+      "sourceItemId": "57e1b24b-19e4-43fe-859b-94cc0b275d97",
+      "sourceType": "SqlAnalyticsEndpoint",
+      "sourceWorkspaceId": "18c279c7-341f-4704-a3e6-454d6dee3e52"
+    }
+  ]
+}

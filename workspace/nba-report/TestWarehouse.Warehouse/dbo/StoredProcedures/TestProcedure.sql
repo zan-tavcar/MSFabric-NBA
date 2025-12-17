@@ -1,0 +1,2 @@
+CREATE PROCEDURE dbo.TestProcedure AS
+SELECT 1
